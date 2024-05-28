@@ -7,7 +7,7 @@ import Prop from "./Components/Props/Prop";
 import Component from "./Components/ReactComponent/Component";
 import Counter from "./Components/State/Counter";
 import Reducer from "./Components/UseReducer/Reducer";
-import ApiExample from "./Components/ApiExample/ApiExample"
+import ApiExample from "./Components/ApiExample/ApiExample";
 import Linker from "./Components/Linker/Linker";
 
 function App() {
@@ -16,18 +16,20 @@ function App() {
 
   return (
     <>
-      <userContext.Provider
-        value={{ userName, setuserName, surName, setsurName }}
-      >
-        {/* <Component />
+      <div className="main-container">
+        <userContext.Provider
+          value={{ userName, setuserName, surName, setsurName }}
+        >
+          {/* <Component />
         <Counter />
         <Prop name="Guest" age={32} />
         <EventHandler />
         <Useeffect />
         <Reducer />
         <ApiExample /> */}
-        <Linker/>
-      </userContext.Provider>
+          <Linker />
+        </userContext.Provider>
+      </div>
     </>
   );
 }
