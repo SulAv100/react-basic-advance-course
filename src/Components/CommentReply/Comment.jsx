@@ -2,44 +2,7 @@ import React, { useState } from "react";
 import "./Comment.css";
 
 const CommentSection = () => {
-  const initialComments = {
-    id: 1,
-    items: [
-      {
-        id: 1,
-        text: "This is the first comment",
-        items: [
-          {
-            id: 2,
-            text: "This is a reply to the first comment",
-            items: [
-              {
-                id: 3,
-                text: "This is a nested reply",
-                items: [],
-              },
-            ],
-          },
-          {
-            id: 5,
-            text: "This is another reply to the first comment",
-            items: [],
-          },
-        ],
-      },
-      {
-        id: 4,
-        text: "This is another comment",
-        items: [
-          {
-            id: 6,
-            text: "This is a reply to another comment",
-            items: [],
-          },
-        ],
-      },
-    ],
-  };
+  
 
   const Comment = ({ comment, handleReplyClick, handleReplyInputChange, uploadReply }) => {
     return (
@@ -81,7 +44,7 @@ const CommentSection = () => {
   };
 
   const [input, setInput] = useState("");
-  const [comments, setComments] = useState(initialComments);
+  const [comments, setComments] = useState({id: 0, text : '', items:[]});
   const [uniqueId, setUniqueId] = useState(9);
 
   const handleReplyClick = (commentId) => {
