@@ -41,25 +41,94 @@ const CommentSection = () => {
     ],
   };
 
+  const Comment = ({ comment, handleReplyClick, handleReplyInputChange, uploadReply }) => {
+    return (
+      <div className="comment-container-single">
+        <div key={comment.id} className="higher-order-comment">
+          <span>{comment.text}</span>
+          <div onClick={() => handleReplyClick(comment.id)} className="reply-this-shit">Reply</div>
+          {comment.replyFlag && (
+            <>
+              <div>
+                <input
+                  type="text"
+                  autoFocus
+                  value={comment.replyInput || ""}
+                  onChange={(e) => handleReplyInputChange(comment.id, e.target.value)}
+                />
+              </div>
+              <div>
+                <button onClick={() => uploadReply(comment.id)}>Reply</button>
+              </div>
+            </>
+          )}
+        </div>
+        <div className="comment-box-reply">
+          {comment.items?.map((reply) => (
+            <div style={{ paddingLeft: "50px", paddingTop: '10px' }} key={reply.id} className="okay">
+              <Comment
+                key={reply.id}
+                comment={reply}
+                handleReplyClick={handleReplyClick}
+                handleReplyInputChange={handleReplyInputChange}
+                uploadReply={uploadReply}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
   const [input, setInput] = useState("");
   const [comments, setComments] = useState(initialComments);
   const [uniqueId, setUniqueId] = useState(9);
-  const [replyFlag, setReplyFlag] = useState(null); // Track the comment ID being replied to
-  const [replyInput, setReplyInput] = useState("");
 
-  const handleFlag = (commentId) => {
-    setReplyFlag(commentId);
+  const handleReplyClick = (commentId) => {
+    const toggleReplyFlag = (comments) => {
+      return comments.map((comment) => {
+        if (comment.id === commentId) {
+          return { ...comment, replyFlag: !comment.replyFlag };
+        } else if (comment.items.length > 0) {
+          return { ...comment, items: toggleReplyFlag(comment.items) };
+        }
+        return comment;
+      });
+    };
+
+    setComments((prevState) => ({
+      ...prevState,
+      items: toggleReplyFlag(prevState.items),
+    }));
   };
 
-  const uploadToComment = () => {
-    if (input) {
-      setUniqueId((prevId) => prevId + 1);
+  const handleReplyInputChange = (commentId, value) => {
+    const updateReplyInput = (comments) => {
+      return comments.map((comment) => {
+        if (comment.id === commentId) {
+          return { ...comment, replyInput: value };
+        } else if (comment.items.length > 0) {
+          return { ...comment, items: updateReplyInput(comment.items) };
+        }
+        return comment;
+      });
+    };
+
+    setComments((prevState) => ({
+      ...prevState,
+      items: updateReplyInput(prevState.items),
+    }));
+  };
+
+  const uploadToComment = (event) => {
+    if (event && input) {
+      setUniqueId(uniqueId + 1);
       setComments((prevState) => ({
         ...prevState,
         items: [...prevState.items, { id: uniqueId, text: input, items: [] }],
       }));
-      setInput('');
     }
+    setInput('');
   };
 
   const uploadReply = (commentId) => {
@@ -68,7 +137,9 @@ const CommentSection = () => {
         if (comment.id === commentId) {
           return {
             ...comment,
-            items: [...comment.items, { id: uniqueId, text: replyInput, items: [] }],
+            items: [{ id: uniqueId, text: comment.replyInput, items: [] }, ...comment.items],
+            replyInput: "",
+            replyFlag: false,
           };
         } else if (comment.items.length > 0) {
           return {
@@ -80,39 +151,11 @@ const CommentSection = () => {
       });
     };
 
-    if (replyInput) {
-      setUniqueId((prevId) => prevId + 1);
-      setComments((prevState) => ({
-        ...prevState,
-        items: addReply(prevState.items),
-      }));
-      setReplyInput('');
-      setReplyFlag(null);
-    }
-  };
-
-  const Comment = ({ comment }) => {
-    return (
-      <div className="comment-container-single">
-        <div key={comment.id} className="higher-order-comment">
-          <span>{comment.text}</span>
-          <div onClick={() => handleFlag(comment.id)} className="reply-this-shit">Reply</div>
-          {replyFlag === comment.id && (
-            <>
-              <div><input type="text" autoFocus value={replyInput} onChange={(e) => setReplyInput(e.target.value)} /></div>
-              <div><button onClick={() => uploadReply(comment.id)}>Reply</button></div>
-            </>
-          )}
-        </div>
-        <div className="comment-box-reply">
-          {comment.items?.map((reply) => (
-            <div style={{ paddingLeft: "50px", paddingTop: '10px' }} key={reply.id} className="okay">
-              <Comment key={reply.id} comment={reply} />
-            </div>
-          ))}
-        </div>
-      </div>
-    );
+    setUniqueId(uniqueId + 1);
+    setComments((prevState) => ({
+      ...prevState,
+      items: addReply(prevState.items),
+    }));
   };
 
   return (
@@ -130,7 +173,13 @@ const CommentSection = () => {
         </div>
         <div className="comment-container-main">
           {comments.items?.map((comment) => (
-            <Comment key={comment.id} comment={comment} />
+            <Comment
+              key={comment.id}
+              comment={comment}
+              handleReplyClick={handleReplyClick}
+              handleReplyInputChange={handleReplyInputChange}
+              uploadReply={uploadReply}
+            />
           ))}
         </div>
       </div>
