@@ -1,92 +1,141 @@
-import React from "react";
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import React, { useState } from "react";
 import "./Comment.css";
 
-function Comment() {
+const CommentSection = () => {
+  const initialComments = {
+    id: 1,
+    items: [
+      {
+        id: 1,
+        text: "This is the first comment",
+        items: [
+          {
+            id: 2,
+            text: "This is a reply to the first comment",
+            items: [
+              {
+                id: 3,
+                text: "This is a nested reply",
+                items: [],
+              },
+            ],
+          },
+          {
+            id: 5,
+            text: "This is another reply to the first comment",
+            items: [],
+          },
+        ],
+      },
+      {
+        id: 4,
+        text: "This is another comment",
+        items: [
+          {
+            id: 6,
+            text: "This is a reply to another comment",
+            items: [],
+          },
+        ],
+      },
+    ],
+  };
 
-    const {data, error, isLoading} = useQuery({
-        queryKey:['random'],
-        queryFn: async ()=>{
-            const response = await fetch('https://source.unsplash.com/random');
-            if(!response.ok){
-                throw new Error ("Network response was not okay");
-            }else{
-                return response.json();
-            }
+  const [input, setInput] = useState("");
+  const [comments, setComments] = useState(initialComments);
+  const [uniqueId, setUniqueId] = useState(9);
+  const [replyFlag, setReplyFlag] = useState(null); // Track the comment ID being replied to
+  const [replyInput, setReplyInput] = useState("");
+
+  const handleFlag = (commentId) => {
+    setReplyFlag(commentId);
+  };
+
+  const uploadToComment = () => {
+    if (input) {
+      setUniqueId((prevId) => prevId + 1);
+      setComments((prevState) => ({
+        ...prevState,
+        items: [...prevState.items, { id: uniqueId, text: input, items: [] }],
+      }));
+      setInput('');
+    }
+  };
+
+  const uploadReply = (commentId) => {
+    const addReply = (comments) => {
+      return comments.map((comment) => {
+        if (comment.id === commentId) {
+          return {
+            ...comment,
+            items: [...comment.items, { id: uniqueId, text: replyInput, items: [] }],
+          };
+        } else if (comment.items.length > 0) {
+          return {
+            ...comment,
+            items: addReply(comment.items),
+          };
         }
-    })
+        return comment;
+      });
+    };
 
-    const [comment, setComment] = useState('');
-    const [reply, setReply] = useState('');
+    if (replyInput) {
+      setUniqueId((prevId) => prevId + 1);
+      setComments((prevState) => ({
+        ...prevState,
+        items: addReply(prevState.items),
+      }));
+      setReplyInput('');
+      setReplyFlag(null);
+    }
+  };
 
+  const Comment = ({ comment }) => {
+    return (
+      <div className="comment-container-single">
+        <div key={comment.id} className="higher-order-comment">
+          <span>{comment.text}</span>
+          <div onClick={() => handleFlag(comment.id)} className="reply-this-shit">Reply</div>
+          {replyFlag === comment.id && (
+            <>
+              <div><input type="text" autoFocus value={replyInput} onChange={(e) => setReplyInput(e.target.value)} /></div>
+              <div><button onClick={() => uploadReply(comment.id)}>Reply</button></div>
+            </>
+          )}
+        </div>
+        <div className="comment-box-reply">
+          {comment.items?.map((reply) => (
+            <div style={{ paddingLeft: "50px", paddingTop: '10px' }} key={reply.id} className="okay">
+              <Comment key={reply.id} comment={reply} />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
 
   return (
-    <div className="comment-box">
-      <h1>Comments</h1>
-      <div className="borderline"></div>
-      <div className="message-area">
-        <div className="comment-area">
-          <figure>
-            <img src="" alt="" />
-          </figure>
-          <div className="info">
-            <div className="time-zone">
-              <span>Name</span>
-              <span>time</span>
-            </div>
-            <span>How artistix</span>
-            <span className="reply-button">Reply</span>
-          </div>
+    <>
+      <div className="all-contain">
+        <div className="input-contain">
+          <input
+            type="text"
+            autoFocus
+            placeholder="Enter your comment"
+            onChange={(event) => setInput(event.target.value)}
+            value={input}
+          />
+          <span onClick={uploadToComment} className="button">Comment</span>
         </div>
-
-        <div className="reply-container">
-          <figure>
-            <img src="" alt="" />
-          </figure>
-          <div className="info">
-            <div className="time-zone">
-              <span>Name</span>
-              <span>time</span>
-            </div>
-            <span>How artistix</span>
-            <span className="reply-button">Reply</span>
-          </div>
-        </div>
-
-        <div className="comment-area">
-          <figure>
-            <img src="" alt="" />
-          </figure>
-          <div className="info">
-            <div className="time-zone">
-              <span>Name</span>
-              <span>time</span>
-            </div>
-            <span>How artistix</span>
-            <span className="reply-button">Reply</span>
-          </div>
-        </div>
-        <div className="comment-area">
-          <figure>
-            <img src="" alt="" />
-          </figure>
-          <div className="info">
-            <div className="time-zone">
-              <span>Name</span>
-              <span>time</span>
-            </div>
-            <span>How artistix</span>
-            <span className="reply-button">Reply</span>
-          </div>
+        <div className="comment-container-main">
+          {comments.items?.map((comment) => (
+            <Comment key={comment.id} comment={comment} />
+          ))}
         </div>
       </div>
-      <div className="input-container">
-        <input type="text" />
-      </div>
-      <button>Send</button>
-    </div>
+    </>
   );
-}
+};
 
-export default Comment;
+export default CommentSection;

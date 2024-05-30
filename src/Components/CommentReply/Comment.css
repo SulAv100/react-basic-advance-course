@@ -1,79 +1,78 @@
-.comment-box{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    background-color: wheat;
-    color: black;
-    width: 800px;
-    padding: 30px 30px 10px 30px;
-    font-family: sans-serif;
-    border-radius: 10px;
+.input-contain{
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-.borderline{
-    border: 1px solid white;
-}
-.message-area{
-    padding: 0 0 0 10px;
-    display: flex;
-    flex-direction: column;
+    align-items: center;
     gap: 30px;
     
 }
-.reply-container{
-    display: flex;
-    margin: 0 0 0 100px;
-    gap: 20px;
-    background-color: white;
-}
-.comment-area{
-    display: flex;
-    gap: 20px;
-    background-color: white;
-    border-radius: 10px;
-}
-figure{
-    height: 100px;
-    width: 100px;
-    border-radius: 20px;
-}
-figure img{
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-    
-}
-.info{
+.all-contain{
     display: flex;
     flex-direction: column;
-    font-size: 19px;
-    justify-content: space-between;
+    align-items: center;
 }
-.time-zone{
-    display: flex;
-    gap: 50px;
+.input-contain input{
+    height: 40px;
+    width: 500px;
+    padding-left: 20px;
+    font-size: 18px;
 }
-.reply-button{
-    font-size: 12px;
+.input-contain span{
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 18px;
+    background-color: rgb(145, 104, 234);
+    border: none;
+    color: white;
     cursor: pointer;
 }
-input{
-    width: 500px;
-    flex: 1;
-    height: 30px;
+.comment-container-main{
+    border: 1px solid black;
+    width: 1000px;
+    background-color: rgb(238, 235, 230);
+    padding: 10px;
+    font-size: 15px;
     border-radius: 10px;
-    padding-left: 10px;
-    font-size: 16px;
+   
 }
-button{
-    width: 70px;
-    height: 30px;
+.comment-container-single{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    
+}
+.higher-order-comment{
+    background-color: rgb(179, 56, 255);
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    font-size: 18px;
+    font-family: sans-serif;
+    width: max-content;
+}
+.reply-this-shit{
+    width: max-content;
+    margin: 10px 0 -10px 0;
+    color: black;
+    cursor: pointer;
+    font-weight: 1000;
+}
+#reply-shit{
+    border: 1px solid black;
+    padding: 10px;
+    margin-top: 20px;
+    flex: 1;
     border-radius: 5px;
-    font-size: 17px;
     outline: none;
-    border: none;
+
+}
+#reply-btn{
+    border: 1px solid black;
+    padding: 10px;
+    margin-top: 10px;
+    width: 70px;
+    border-radius: 4px;
+    outline: none;
+    background-color: black;
+    color: white;
+    font-size: 16px;
     cursor: pointer;
 }
