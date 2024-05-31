@@ -42,6 +42,7 @@ function ApiExample() {
          item.id === id ? { ...item, price: Number(editValue) } : item
       ))
     );
+    setEditValue('');
   };
   
   return (
@@ -88,7 +89,6 @@ function ApiExample() {
       </>
     ) : (
       <>
-        {/* Laptop name and price already rendered above, no need to render again */}
         <button onClick={() => setEditFlag(item.id)}>Edit shit</button>
       </>
     )}

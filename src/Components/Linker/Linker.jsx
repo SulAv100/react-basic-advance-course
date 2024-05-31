@@ -8,6 +8,7 @@ import Cart from '../Cart/Cart'
 import Form from '../FormHandling/Form'
 import Comment from '../CommentReply/Comment'
 import ApplyModal from '../Model/ApplyModal'
+import DataClick from '../DataonClick/DataClick'
 
 function Linker() {
   return (
@@ -22,6 +23,7 @@ function Linker() {
                     <Link to='/login'>Login</Link>
                     <Link to='/comment'>Comment</Link>
                     <Link to='/modal' >Modal</Link>
+                    <Link to='/fetch'>FetchData</Link>
                 </ul>
             </nav>
         </header>
@@ -34,6 +36,7 @@ function Linker() {
             <Route path='/login' element={<Form/>}/>
             <Route path='/comment' element={<Comment/>}/>
             <Route path='/modal'  element={<ApplyModal/>} />
+            <Route path='/fetch' element={<DataClick/>}/>
         </Routes>
     </>
 )

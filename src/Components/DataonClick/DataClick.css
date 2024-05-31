@@ -1,0 +1,14 @@
+.outer-box{
+    border: 1px solid black;
+    position: absolute;
+    top: 50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    height: 400px;
+    width: 500px;
+    padding: 20px;
+    font-size: 18px;
+    font-family: cursive;
+    border-radius: 10px;
+    overflow-y: scroll;
+}
