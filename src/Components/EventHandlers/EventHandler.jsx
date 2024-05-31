@@ -1,20 +1,24 @@
-import React from 'react';
+import React, {useState} from 'react'
 
 function EventHandler() {
-    const handleButton = (event) => {
-        if (event) {
-            alert("Event has been triggered ");
-        }
+    const [data, setData] = useState({
+        name:'Sulav',
+        age:21,
+        address:'Rambazar'
+    })
+  return (
+    <>
+    {
+        data.map((item)=>{
+            return <>
+            <span>{item.name}</span>
+            <span>{item.age}</span>
+            <span>{item.address}</span>
+            </>
+        })
     }
-
-    return (
-        <>
-            {/* This is called inline event handling */}
-            <button onClick={handleButton}>Handle Me</button>
-
-        
-        </>
-    );
+    </>
+)
 }
 
-export default EventHandler;
+export default EventHandler

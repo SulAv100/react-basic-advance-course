@@ -1,74 +1,116 @@
-import React from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { useState } from 'react';
+import React, { useState } from "react";
 
 function ApiExample() {
+  const [data, setData] = useState({
+    name: "Sulav",
+    age: 21,
+    address: "Rambazar",
+  });
 
-    const [newTask, setNewTask] = useState('');
+  const [arrayData, setArrayData] = useState([
+    { id: 1, fname: "acer", price: 10000 },
+    { id: 2, fname: "lenovo", price: 20000 },
 
-    const queryClient = useQueryClient();
+    { id: 3, fname: "hp", price: 30000 },
 
-    const {data, error, isLoading} = useQuery({
-        queryKey:['nice'],
-        queryFn : async ()=>{
-            const response = await fetch("http://localhost:3000/posts");
-            if(!response.ok){
-                throw new Error("Error has occured");
-            }else{
-                return response.json();
-            }
-        }
-        
-    });
+    { id: 4, fname: "dell", price: 40000 },
 
-    const mutation = useMutation({
-        mutationFn: async (newPost)=>{
-            const response = await fetch("http://localhost:3000/posts",{
-                method:'POST',
-                headers:{
-                    'Content-Type':'application/json'
-                },
-                body: JSON.stringify(newPost)
-            }).then(response=>{
-                if(!response.ok){
-                    throw new Error ("Netowkr response was not okay");
-                }else{
-                    console.log("Data sent successfully");
-                }
-            })
-        },
-        onSuccess : ()=>{
-            queryClient.invalidateQueries({queryKey:['nice']});
-        }
-    })
+    { id: 5, fname: "predator", price: 60000 },
+  ]);
 
-    
+  const [laptopName, setLaptopName] = useState("");
+  const [laptopPrice, setLaptopPrice] = useState("");
+  const [editFlag, setEditFlag] = useState(null);
+  const [editValue, setEditValue] = useState("");
 
-    
-    if(error) return <p> an Error has occured</p>
-    if(isLoading) return <p>Fetched data is loading </p>
+  const handleSubmissionLaptopData = () => {
+    setArrayData((prevState) => [
+      ...prevState,
+      {
+        id: arrayData.length + 1,
+        fname: laptopName,
+        price: laptopPrice,
+      },
+    ]);
+    setLaptopName("");
+    setLaptopPrice("");
+  };
 
-    const handleSubmit= (event)=>{
-        event.preventDefault();
-        mutation.mutate({title: newTask, tags:[]});
-    }
+  const handleUpdation = (id) => {
+    setArrayData((prevState) =>
+      prevState.map((item) => (
+         item.id === id ? { ...item, price: Number(editValue) } : item
+      ))
+    );
+  };
+  
   return (
     <>
+      <span>{data.name}</span>
+      <span>{data.age}</span>
+      <span>{data.address}</span>
 
-        <form onSubmit={handleSubmit}>
+      <div className="input-box">
+        <input
+          type="text"
+          onChange={(event) => setData({ ...data, name: event.target.value })}
+        />
+        <input
+          type="number"
+          onChange={(event) => setData({ ...data, age: event.target.value })}
+        />
+        <input
+          type="text"
+          onChange={(event) =>
+            setData({ ...data, address: event.target.value })
+          }
+        />
+      </div>
 
-            <input type="text" value={newTask} placeholder='ENter your new task' onChange={(event)=> setNewTask(event.target.value)} />
-            <button type='submit'>Add task</button>
-        </form>
-        {
-            data?.map((item)=>(
-                <div key={item.id}>
-                    <span>{item.title}</span>
-                </div>
-            ))
-        }
+      <div className="laptop-name">
+      {arrayData?.map((item) => (
+  <div key={item.id} className="single-laptop">
+    <span>{item.fname}</span>
+    <span>{item.price}</span>
+    {item.id === editFlag ? (
+      <>
+        <input
+          type="text"
+          value={editValue}
+          onChange={(event) => setEditValue(event.target.value)}
+          placeholder="Enter your updated data"
+        />
+        {editValue.length > 1 ? (
+          <button onClick={() => handleUpdation(item.id)}>Submit</button>
+        ) : (
+          <button disabled>Submit</button>
+        )}
+      </>
+    ) : (
+      <>
+        {/* Laptop name and price already rendered above, no need to render again */}
+        <button onClick={() => setEditFlag(item.id)}>Edit shit</button>
+      </>
+    )}
+  </div>
+))}
+
+      </div>
+      <div className="laptop-data-change">
+        <input
+          type="text"
+          value={laptopName}
+          onChange={(event) => setLaptopName(event.target.value)}
+        />
+        <input
+          type="text"
+          value={laptopPrice}
+          onChange={(event) => setLaptopPrice(event.target.value)}
+        />
+        <button onClick={handleSubmissionLaptopData}>Upload Data</button>
+      </div>
     </>
-)
+  );
 }
 
-export default ApiExample
+export default ApiExample;

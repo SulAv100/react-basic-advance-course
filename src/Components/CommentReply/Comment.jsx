@@ -44,8 +44,8 @@ const CommentSection = () => {
   };
 
   const [input, setInput] = useState("");
-  const [comments, setComments] = useState({id: 0, text : '', items:[]});
-  const [uniqueId, setUniqueId] = useState(9);
+  const [comments, setComments] = useState({id:0, text:'', items:[]});
+  const [uniqueId, setUniqueId] = useState(0);
 
   const handleReplyClick = (commentId) => {
     const toggleReplyFlag = (comments) => {
