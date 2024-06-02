@@ -1,0 +1,40 @@
+.stepper-container{
+    margin: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.stepper-container .upper-bracket{
+        display: flex;
+        align-items: center;
+    }
+.upper-bracket .steps{
+    border: 1px solid black;
+    padding: 30px;
+    border-radius: 50%;
+    font-size: 18px;
+    font-weight: 800;
+}
+.upper-bracket .line{
+    border: 1px solid black;
+    border-radius: none;
+    height: 10px;
+    width: 150px;
+    border-left: none;
+    border-right: none;
+   
+}
+.button-verification{
+    padding: 50px;
+}
+.button-verification button{
+    padding: 20px;
+    border-radius: 5px;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+}
+.fa-circle-check{
+    font-size: 80px;
+    color: rgb(113, 230, 113);
+}
