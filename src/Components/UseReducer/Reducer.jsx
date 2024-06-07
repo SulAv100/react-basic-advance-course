@@ -9,7 +9,7 @@ function MyForm() {
   }, []);
 
   return (
-    <form>
+    <form id='refForm'>
       <label htmlFor="firstName">First Name:</label>
       <input id="firstName" type="text" ref={firstInputRef} />
 

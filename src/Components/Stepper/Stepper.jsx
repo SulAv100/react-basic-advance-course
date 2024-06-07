@@ -22,7 +22,7 @@ function Stepper() {
             // this ...Array makes an array of Array(this number) and _ represents the current index of the array
             <div className="upper-bracket" key={index}>
               <>
-                {index < 3 ? (
+                {index < totalSteps-1 ? (
                   <>
                     {count > index ? (
                       <>
@@ -73,7 +73,7 @@ function Stepper() {
             }          */}
         </div>
         <div className="button-verification">
-          {count === 5 ? (
+          {count === 4 ? (
             <button>Done</button>
           ) : (
             <button onClick={increaseCount}>Submit</button>
